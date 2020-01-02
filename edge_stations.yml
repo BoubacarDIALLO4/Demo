@@ -1,0 +1,29 @@
+---
+- hosts: Central
+  tasks:
+  - name: Installer pip3 !
+    apt:
+      name: python3-pip
+      state: present
+      update_cache: yes
+
+  - name: Create a directory !
+    file: 
+      path: /tpm/src
+      state: directory
+      mode: "u=rw,g=wx,o=rwx"
+
+  - name: installer virtualenv !
+    apt:
+      name: "{{item}}"
+      state: present
+      #update_cache: yes
+    with_items:
+      - curl
+      - w3m
+      - git
+      - unzip
+      - htop
+      - tar 
+      - screen
+      - vim

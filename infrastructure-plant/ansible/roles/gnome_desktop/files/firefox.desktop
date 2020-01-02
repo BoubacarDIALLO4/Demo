@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Exec=/bin/firefox http://localhost:5000
+Hidden=false
+NoDisplay=false
+Name[en_US]=Firefox
+Name=Firefox
+Comment[en_US]=Opening Firefox on AIVI application on startup
+Comment=Opening Firefox on AIVI application on startup

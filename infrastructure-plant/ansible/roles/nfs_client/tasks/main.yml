@@ -1,0 +1,38 @@
+---
+
+- name: Install packages for nfs client
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - nfs-utils
+    - rpcbind
+  notify: reload daemon
+
+- meta: flush_handlers
+
+- name: Ensure rpcbind is running
+  service:
+    name: rpcbind
+    state: started
+    enabled: true
+
+- name: Mount archive directory on central station
+  mount:
+    src: "{{ item.ip }}:{{ aivi_archive_dir }}"
+    path: "/storage/archive/{{ item.station_name }}"
+    fstype: nfs
+    opts: "vers=4"
+    state: mounted
+  loop: "{{ stations | from_json }}"
+  register: config_fstab
+
+- name: Mount buffer directory on central station
+  mount:
+    src: "{{ item.ip }}:{{ aivi_buffer_dir }}"
+    path: "/storage/buffer/{{ item.station_name }}"
+    fstype: nfs
+    opts: "vers=4"
+    state: mounted
+  loop: "{{ stations | from_json }}"
+  register: config_fstab

@@ -1,0 +1,14 @@
+---
+
+- name: Start service aivi
+  service:
+    name: aivi
+    state: restarted
+    enabled: true
+  changed_when: false
+
+- name: Start firefox
+  service:
+    name: firefox
+    state: restarted
+  changed_when: false

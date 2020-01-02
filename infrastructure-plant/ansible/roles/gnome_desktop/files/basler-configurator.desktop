@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Terminal=true
+Name=Basler Configurator
+Exec=/opt/aivi/bin/basler-configurator.sh
+Categories=Application;

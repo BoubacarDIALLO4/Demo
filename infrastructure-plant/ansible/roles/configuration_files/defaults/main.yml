@@ -1,0 +1,6 @@
+---
+# defaults file for configuration_files
+configuration_path: ../../../../app/default_configurations/ui-only/
+aivi_user_name: "aivi"
+aivi_daemon_name: "aivid"
+aivi_etc_dir: "/etc/aivi"

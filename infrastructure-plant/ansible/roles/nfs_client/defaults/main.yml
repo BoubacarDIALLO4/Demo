@@ -1,0 +1,4 @@
+---
+aivi_var_dir: /storage/aivi
+aivi_buffer_dir: "{{ aivi_var_dir }}/buffer"
+aivi_archive_dir: "{{ aivi_var_dir }}/archive"

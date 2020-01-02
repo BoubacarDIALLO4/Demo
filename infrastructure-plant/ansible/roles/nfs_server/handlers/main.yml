@@ -1,0 +1,16 @@
+---
+
+- name: restart firewalld
+  become: true
+  service:
+    name: firewalld
+    state: restarted
+
+- name: restart nfs and rpcbind
+  become: true
+  service:
+    name: "{{ item }}"
+    state: restarted
+  loop:
+    - rpcbind
+    - nfs-server

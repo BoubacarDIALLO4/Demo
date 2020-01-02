@@ -1,0 +1,15 @@
+name: infrastructure-plant
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+    - python==3.6.4
+    - passlib==1.7.1
+    - PyYAML==3.13
+    - pip:
+      - ansible==2.7.9
+      - molecule==2.20.0
+      - pytest-xdist==1.24.1
+      - docker==3.7.0
+      - python-vagrant==0.5.15
+      - paramiko==2.4.2

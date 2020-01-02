@@ -1,0 +1,26 @@
+---
+- name: Copy OPCUA test scripts
+  copy:
+    src: {{ item }}
+    dest: "/tmp/"
+  with_items:
+    - "test_opcua_connectivity.py"
+    - "test_opcua_tag_reading.py"
+
+- name: Give execution right to test scripts
+  file:
+    path: "/tmp/{{ item }}"
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - "test_opcua_connectivity.py"
+    - "test_opcua_tag_reading.py"
+
+- name: Run connectivity test script
+  script: "/opt/aivi/current/bin/python3 test_opcua_connectivity.py"
+  args:
+    chdir: "/tmp"
+
+- name: Run tag reading test script
+  script: "/opt/aivi/current/bin/python3 test_opcua_tag_reading.py"
+  args:
+    chdir: "/tmp"

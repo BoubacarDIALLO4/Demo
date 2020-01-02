@@ -1,0 +1,26 @@
+---
+- name: Create aivi opt version directory
+  file:
+    path: "/opt/aivi/{{ app_version }}/"
+    state: directory
+    owner: "{{ aivi_daemon_name }}"
+    group: "{{ aivi_daemon_name }}"
+    mode: u=rwX,g=rX,o=rX
+
+- name: Extract artifact
+  unarchive:
+    src: "{{ app_archive_name }}"
+    dest: "/opt/aivi/{{ app_version }}"
+    creates: "/opt/aivi/{{ app_version }}/lib/python3.6/site-packages/aivi-{{ app_version }}-py3.6.egg/aivi"
+    owner: "{{ aivi_daemon_name }}"
+    group: "{{ aivi_daemon_name }}"
+    mode: u=rwX,g=rX,o=rX
+
+- name: Create symbolic link to current version directory
+  file:
+    src: "/opt/aivi/{{ app_version }}"
+    dest: "/opt/aivi/current"
+    state: link
+    owner: "{{ aivi_daemon_name }}"
+    group: "{{ aivi_daemon_name }}"
+    mode: u=rwX,g=rX,o=rX

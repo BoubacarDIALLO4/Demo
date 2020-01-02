@@ -1,0 +1,9 @@
+---
+
+- name: Push and extract pylon binary
+  import_tasks: pylon.yml
+  tags: pylon
+
+- name: Push and extract aivi artifact
+  import_tasks: artifact.yml
+  tags: artifact

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Exec=sudo /etc/opt/elo-usb/elova --nvram --videoscreen=0
+Hidden=false
+NoDisplay=false
+Name=Calibrate Touch Screen
+Comment=Calibrate ELO touch screen using ELO drivers

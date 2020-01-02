@@ -1,0 +1,25 @@
+[Unit]
+Description=AIVI - Applied Intelligence for Visual Inspection
+After=network.target
+PartOf=aivi.service
+After=aivi.service
+
+{% if "desync" not in aivi_service_etc_dir %}
+Conflicts=basler-configurator.service
+{% endif %}
+
+[Service]
+User={{ aivi_daemon_name }}
+Group={{ aivi_storage_group_name }}
+Environment=AIVI_ETC_DIR={{ aivi_service_etc_dir }}
+Environment=AIVI_VAR_DIR={{ aivi_var_dir }}
+Environment=AIVI_MODEL_DIR={{ aivi_model_dir }}
+ExecStart=/opt/aivi/current/bin/python -m aivi
+WorkingDirectory=/opt/aivi/current
+Restart=on-failure
+SuccessExitStatus=3 4
+RestartForceExitStatus=3 4
+UMask=0002
+
+[Install]
+WantedBy=aivi.service

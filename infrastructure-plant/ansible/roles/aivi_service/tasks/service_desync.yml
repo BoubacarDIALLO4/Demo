@@ -1,0 +1,23 @@
+---
+
+- name: Find desync folders
+  find:
+    paths: /etc/aivi/
+    file_type: directory
+    patterns: "desync*"
+  register: desync_stations
+
+- name: Push desync_stations service unit-files
+  include: service_desync_template_config.yml
+  with_items: "{{ desync_stations.files }}"
+  loop_control:
+    loop_var: file
+
+- meta: flush_handlers
+
+- name: Start services station_desync
+  service:
+    name: "aivi-{{ item.path | basename }}"
+    enabled: true
+  changed_when: false
+  with_items: "{{ desync_stations.files }}"

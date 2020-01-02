@@ -1,0 +1,14 @@
+---
+
+- name: Add shortcut to autostart directory
+  import_tasks: autostart.yml
+  tags: autostart
+
+- name: Add shortcuts to desktop
+  import_tasks: desktop_shortcuts.yml
+  tags: desktop_shortcuts
+
+- name: Disable the gnome notification
+  command: dbus-launch gsettings set org.gnome.desktop.notifications show-banners false
+  become: true
+  become_user: "{{ aivi_user_name }}"

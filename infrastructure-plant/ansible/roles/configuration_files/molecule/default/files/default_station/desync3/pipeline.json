@@ -1,0 +1,33 @@
+{
+  "metadata": {
+    "station_info": {
+      "country": "TEST_COUNTRY",
+      "plant": "TEST_PLANT",
+      "client_brand": "TEST_BRAND",
+      "client_plant": "TEST_CLIENT_PLANT",
+      "line_id": "1row_desync",
+      "row": "1",
+      "station_type": "FIN"
+    },
+    "configuration_version": "v1.1.0"
+  },
+  "triggers": [
+    {
+      "name": "opcua",
+      "type": "OpcuaTrigger",
+      "filter_regex": ",^L",
+      "url": "{opcua_server_url}",
+      "tag_id": "{opcua_tag_id}"
+    }
+  ],
+  "nodes": [
+    {
+      "name": "load",
+      "type": "LoadResultFromLocalStorage"
+    },
+    {
+      "name": "validate",
+      "type": "UserFeedback"
+    }
+  ]
+}

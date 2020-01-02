@@ -1,0 +1,56 @@
+---
+- name: Parse inventory from stations json variable
+  hosts: localhost
+  gather_facts: true
+  tags:
+    - always
+  tasks:
+    - name: add hosts to group 'edge_stations' with UrbanCode variable
+      add_host:
+        name: "{{ item.ip }}"
+        groups: edge_stations
+        instance_name: "{{ item.station_name }}"
+      loop: "{{ stations | from_json }}"
+      when: stations is defined
+
+- name: Setuping the edge-stations
+  hosts: edge_stations
+  remote_user: aiviadmin
+  become: true
+  tags:
+    - setup
+  roles:
+    - role: init_system
+    - role: init_touch_screen
+    - role: gnome_desktop
+    - role: reboot_station
+
+- name: Setuping the NFS server
+  hosts: edge_stations
+  remote_user: aiviadmin
+  vars:
+    central_pc_ip: "{{ hostvars[inventory_hostname]['ansible_env'].SSH_CONNECTION.split(' ')[0] }}"
+  tags:
+    - nfs_server
+  roles:
+    - role: nfs_server
+
+- name: Setuping the NFS client
+  hosts: localhost
+  become: true
+  tags:
+    - nfs_client
+  roles:
+    - role: nfs_client
+
+- name: Deploy AIVI
+  hosts: edge_stations
+  remote_user: aiviadmin
+  become: true
+  tags:
+    - aivi_deploy
+  roles:
+    - role: configuration_files
+    - role: deploy_models
+    - role: extract_archives
+    - role: aivi_service

@@ -1,0 +1,12 @@
+---
+aivi_user_name: "aivi"
+aivi_daemon_name: "aivid"
+aivi_password: "aivi"
+aivi_storage_group_name: "aivi_storage"
+aivi_storage_group_gid: 1100
+aivi_etc_dir: "/etc/aivi"
+aivi_var_dir: "/storage/aivi"
+aivi_buffer_dir: "{{ aivi_var_dir }}/buffer"
+aivi_archive_dir: "{{ aivi_var_dir }}/archive"
+nfs_user_name: "nfsuser"
+nfs_user_uid: 1010

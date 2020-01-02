@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Terminal=true
+Name=Stop AIVI Process
+Exec=/opt/aivi/bin/stop.sh
+Categories=Application;

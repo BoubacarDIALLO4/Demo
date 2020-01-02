@@ -1,0 +1,8 @@
+---
+
+- name: Write startup file for aivi application at session login
+  copy:
+    src: aivi.desktop
+    dest: /home/{{ aivi_user_name }}/.config/autostart/aivi.desktop
+    owner: "{{ aivi_user_name }}"
+    group: "{{ aivi_user_name }}"

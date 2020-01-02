@@ -1,0 +1,21 @@
+---
+
+- name: Copy scripts to start manually aivi or basler-configurator
+  import_tasks: copy_scripts.yml
+  tags: scripts
+
+- name: Prepare aivi-inference service
+  import_tasks: service.yml
+  tags: service
+
+- name: Prepare aivi_desync service
+  import_tasks: service_desync.yml
+  tags: service
+
+- name: Start aivi services
+  import_tasks: start_aivi.yml
+  tags: service
+
+- name: Check status aivi service
+  import_tasks: health_check.yml
+  tags: health

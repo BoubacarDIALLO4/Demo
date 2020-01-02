@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Terminal=true
+Name=Start AIVI
+Exec=/opt/aivi/bin/aivi.sh
+Categories=Application;

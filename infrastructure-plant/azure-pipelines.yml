@@ -1,0 +1,271 @@
+name: "Infrastructure plant pipeline"
+
+variables:
+  azureContainerRegistry: acrprodaivi001.azurecr.io
+
+resources:
+  containers:
+    - container: molecule
+      image: molecule:1.3.3
+      endpoint: aivi_acr_connection
+      options: -v /var/run/docker.sock:/var/run/docker.sock
+    - container: base_ci
+      image: base_ci:1.1.1
+      endpoint: aivi_acr_connection
+
+trigger:
+  branches:
+    include:
+      - master
+      # By repo policy, the pipeline is run for each PR.
+
+stages:
+  - stage: "Stage1"
+    displayName: "Stage 1 - Test"
+    jobs:
+      #**********************************************************************************#
+      #                                 TEST MOLECULE                                    #
+      #**********************************************************************************#
+      - job: "Test_molecule"
+        displayName: "Test molecule roles"
+        condition: not(in(variables['Build.SourceBranchName'], 'master'))
+        # Don't re-run test on master branch. They have been run already in the PR.
+        pool:
+          name: 'Self-Hosted CentOS AIVI DevTestLab'
+        variables:
+          - group: acrprodaivi001
+          - group: proxy-http
+        container: molecule
+
+        #----------
+
+        steps:
+          - checkout: self
+            lfs: true
+            persistCredentials: true
+
+          - script: git lfs pull
+            displayName: 'Git lfs pull'
+
+
+          - script: |
+              source activate deployment
+              cd ansible/roles/extract_archives
+              set -e
+              molecule test
+              cd -
+            displayName: 'Run molecule tests for extract_archives'
+            env:
+              LOGIN_NAME: $(acrprodaivi001_login)
+              PASSWORD: $(acrprodaivi001_pwd)
+
+          - script: |
+              source activate deployment
+              cd ansible/roles/configuration_files
+              set -e
+              molecule test
+              cd -
+            displayName: 'Run molecule tests for configuration_files'
+            env:
+              LOGIN_NAME: $(acrprodaivi001_login)
+              PASSWORD: $(acrprodaivi001_pwd)
+
+          - script: |
+              source activate deployment
+              cd ansible/roles/deploy_models
+              set -e
+              molecule test
+              cd -
+            displayName: 'Run molecule tests for deploy_models'
+            env:
+              LOGIN_NAME: $(acrprodaivi001_login)
+              PASSWORD: $(acrprodaivi001_pwd)
+
+          - script: |
+              source activate deployment
+              cd ansible/roles/init_system
+              set -e
+              molecule test
+              cd -
+            displayName: 'Run molecule tests for init_system'
+            env:
+              LOGIN_NAME: $(acrprodaivi001_login)
+              PASSWORD: $(acrprodaivi001_pwd)
+
+          - script: |
+              source activate deployment
+              cd ansible/roles/usbguard
+              set -e
+              molecule test
+              cd -
+            displayName: 'Run molecule tests for usbguard'
+            env:
+              LOGIN_NAME: $(acrprodaivi001_login)
+              PASSWORD: $(acrprodaivi001_pwd)
+
+      #**********************************************************************************#
+      #                                 TEST INTEGRATION WITH APP                        #
+      #**********************************************************************************#
+      - job: "Test_integration_with_app"
+        displayName: "Test integration with app"
+        condition: in(variables['System.PullRequest.TargetBranch'], 'refs/heads/master')
+        # Check integration with app when preparing release branch
+        pool:
+          name: 'Self-Hosted CentOS AIVI DevTestLab'
+        variables:
+          - group: acrprodaivi001
+          - group: proxy-http
+        container: molecule
+
+        #----------
+
+        steps:
+          - checkout: self
+            lfs: true
+            persistCredentials: true
+
+          - script: git lfs pull
+            displayName: 'Git lfs pull'
+
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'specific'
+              project: 'aivi'
+              pipeline: 'aivi'
+              buildVersionToDownload: 'latestFromBranch'
+              branchName: 'refs/heads/master'
+              downloadType: 'single'
+              artifactName: app
+              downloadPath: '$(System.ArtifactsDirectory)'
+            displayName: 'Download app artifact from master branch'
+
+          - script: |
+              set -eu
+              ARTIFACT_NAME=$(ls $(System.ArtifactsDirectory)/app/)
+              export VERSION=$(echo ${ARTIFACT_NAME} | sed -E 's/.*-([[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+).*/\1/')
+              echo "##vso[task.setvariable variable=APP_VERSION]"${VERSION}
+            displayName: 'Get APP version'
+
+          - script: |
+              set -e
+              mv $(System.ArtifactsDirectory)/app/app-$(APP_VERSION).tar.gz ansible/roles/extract_archives/files/
+              ls -lh ansible/roles/extract_archives/files/
+            displayName: 'Move app artifact to ansible extract role'
+
+          - script: |
+              # WARNING: aivi_service requires APP_VERSION to be defined
+              source activate deployment
+              cd ansible/roles/aivi_service
+              set -e
+              molecule test  # aivi_service requires APP_VERSION
+              cd -
+            displayName: 'Run molecule tests for aivi_service'
+            env:
+              LOGIN_NAME: $(acrprodaivi001_login)
+              PASSWORD: $(acrprodaivi001_pwd)
+
+  - stage: "Stage2"
+    displayName: "Stage 2 - Build & Push"
+    jobs:
+      #**********************************************************************************#
+      #                             BUILD ARTIFACT                                       #
+      #**********************************************************************************#
+      - job: "Build_artifact"
+        displayName: "Build artifact"
+        condition: or(in(variables['Build.SourceBranchName'], 'master'), in(variables['System.PullRequest.TargetBranch'], 'refs/heads/master'))
+        # Build if on branch master or PR targeting master branch
+        pool:
+          name: 'Self-Hosted CentOS AIVI DevTestLab'
+        variables:
+          - group: acrprodaivi001
+          - group: proxy-http
+        container: base_ci
+
+        #----------
+
+        steps:
+          - checkout: self
+            lfs: true
+            persistCredentials: true
+
+          - script: git lfs pull
+            displayName: 'Git lfs pull'
+
+          - script: tar --exclude='*/molecule' -C ansible -czvf $(System.ArtifactsDirectory)/infrastructure-plant.tar.gz .
+            displayName: 'Build artifact'
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathtoPublish: '$(System.ArtifactsDirectory)/infrastructure-plant.tar.gz'
+              artifactName: infrastructure-plant
+
+      #**********************************************************************************#
+      #                               PUSH TO URBAN CODE SERVER                          #
+      #**********************************************************************************#
+      - job: "Push_to_urban_code"
+        displayName: "Push to Urban Code Server"
+        dependsOn: "Build_artifact"
+        condition: and(succeeded(), in(variables['Build.SourceBranchName'], 'master'))
+        pool:
+          name: 'OnPrem - Marcoussis - Ubuntu 1604'
+
+        #----------
+
+        steps:
+          - script: |
+              export VERSION=$(cat version.txt)
+              echo "Artifact version to be pushed: ${VERSION}"
+              echo "##vso[task.setvariable variable=ARTIFACT_VERSION]"${VERSION}
+            displayName: 'Get artifact version'
+
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: infrastructure-plant
+              downloadPath: '$(System.ArtifactsDirectory)'
+
+          - task: ms-vsts.urbancode-deploy-build-extension.udpushcomponentversion-task.udPushComponentVersion@0
+            displayName: 'UrbanCode Deploy '
+            inputs:
+              serverEndpoint: 'Urban Code'
+              udComponentId: AIVI_InfrastructurePlant
+              udComponentVersionName: $(ARTIFACT_VERSION)
+              fileToUpload: '$(System.ArtifactsDirectory)/infrastructure-plant/infrastructure-plant.tar.gz'
+              udclientLocation: /vsts/udclient
+
+        #**********************************************************************************#
+        #                                  PUSH TO BLOB                                    #
+        #**********************************************************************************#
+      - job: "Push_to_blob_storage"
+        displayName: "Push to Blob storage"
+        dependsOn: "Build_artifact"
+        condition: and(succeeded(), in(variables['Build.SourceBranchName'], 'master'))
+        pool:
+          name: 'Self-Hosted CentOS AIVI DevTestLab'
+        variables:
+          - group: proxy-http
+          - group: azure-blob-storage
+        container: base_ci
+
+        #----------
+
+        steps:
+          - script: |
+              export VERSION=$(cat version.txt)
+              echo "Artifact version to be pushed: ${VERSION}"
+              echo "##vso[task.setvariable variable=ARTIFACT_VERSION]"${VERSION}
+            displayName: 'Get artifact version'
+
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: infrastructure-plant
+              downloadPath: '$(System.ArtifactsDirectory)'
+
+          - task: AzureCLI@1
+            inputs:
+              azureSubscription: SPN-prod-app-aivi
+              scriptLocation: 'Inline Script'
+              inlineScript: az storage blob upload -c artifact-001 --file $(System.ArtifactsDirectory)/infrastructure-plant/infrastructure-plant.tar.gz --name infrastructure-plant/${ARTIFACT_VERSION}/infrastructure-plant.tar.gz

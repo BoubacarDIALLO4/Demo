@@ -1,0 +1,43 @@
+---
+- name: create ELO usb driver directory
+  file:
+    path: /etc/opt/elo-usb
+    owner: "{{ aivi_user_name }}"
+    group: "{{ aivi_user_name }}"
+    mode: "0755"
+    state: directory
+
+- name: Extract ELO driver
+  unarchive:
+    src: "SW602614_Elo_Linux_ST_USB_Driver_v5.0.0_x86_64.tgz"
+    dest: "/etc/opt/elo-usb/"
+    creates: "/etc/opt/elo-usb/elova"
+    extra_opts: "--strip-components=1"
+    owner: "{{ aivi_user_name }}"
+    group: "{{ aivi_user_name }}"
+    mode: "0755"
+
+- name: Copy udev rules
+  copy:
+    remote_src: true
+    src: "/etc/opt/elo-usb/99-elotouch.rules"
+    dest: "/etc/udev/rules.d/"
+    mode: "0755"
+
+- name: Push ELO service
+  copy:
+    remote_src: true
+    src: "/etc/opt/elo-usb/elo.service"
+    dest: "/etc/systemd/system/"
+    mode: "0755"
+  register: task_that_needs_reboot
+  notify: reload daemon
+
+- meta: flush_handlers
+
+- name: Start ELO service
+  service:
+    name: elo
+    state: started
+    enabled: true
+

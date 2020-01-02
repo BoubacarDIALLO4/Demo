@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=Pylon IP Configurator
+Exec=/opt/pylon5/bin/IpConfigurator
+Categories=Application;

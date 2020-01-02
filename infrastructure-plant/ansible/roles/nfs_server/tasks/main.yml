@@ -1,0 +1,41 @@
+---
+- name: Setting images folder exports access
+  become: true
+  template:
+    src: exports.j2
+    dest: /etc/exports
+  notify: restart nfs and rpcbind
+
+- name: Enable and start nfs services
+  become: true
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  loop:
+    - rpcbind
+    - nfs-server
+
+- name: Add rules in firewall for nfs
+  become: true
+  firewalld:
+    service: nfs
+    permanent: true
+    state: enabled
+  notify: restart firewalld
+
+- name: Open additional ports for rpcbind
+  become: true
+  firewalld:
+    zone: public
+    port: "{{ item }}"
+    permanent: true
+    state: enabled
+  loop:
+    - 20048/tcp
+    - 20048/udp
+    - 111/tcp
+    - 111/udp
+  notify: restart firewalld
+
+- meta: flush_handlers

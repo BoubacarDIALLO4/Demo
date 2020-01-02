@@ -1,0 +1,18 @@
+---
+- name: create pylon5
+  file:
+    path: /opt/pylon5
+    owner: "{{ aivi_daemon_name }}"
+    group: "{{ aivi_daemon_name }}"
+    mode: "0755"
+    state: directory
+
+
+- name: Extract Pylon binary
+  unarchive:
+    src: "{{ pylon_archive_path }}"
+    dest: "/opt/"
+    creates: "/opt/pylon5/bin"
+    owner: "{{ aivi_daemon_name }}"
+    group: "{{ aivi_daemon_name }}"
+    mode: "0755"

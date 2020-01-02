@@ -1,0 +1,19 @@
+[Unit]
+Description=Tool to calibrate Basler cameras for AIVI
+After=network.target
+PartOf=aivi.service
+Conflicts=aivi-inference.service
+
+[Service]
+User={{ aivi_daemon_name }}
+Environment=AIVI_ETC_DIR={{ aivi_service_etc_dir }}
+Environment=AIVI_VAR_DIR={{ aivi_var_dir }}
+ExecStart=/opt/aivi/current/bin/python -m basler_configurator
+WorkingDirectory=/opt/aivi/current
+Restart=on-failure
+SuccessExitStatus=3 4
+RestartForceExitStatus=3 4
+UMask=0022
+
+[Install]
+WantedBy=multi-user.target

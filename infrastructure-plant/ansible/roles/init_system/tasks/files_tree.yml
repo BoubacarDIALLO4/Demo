@@ -1,0 +1,58 @@
+---
+
+- name: Create aivi bin directory
+  file:
+    path: "/opt/aivi/bin/"
+    state: directory
+    owner: "{{ aivi_daemon_name }}"
+    group: "{{ aivi_daemon_name }}"
+    mode: u=rwx,g=rX,o=rX
+
+- name: Create aivi etc directory
+  file:
+    path: "{{ aivi_etc_dir }}"
+    state: directory
+    owner: "{{ aivi_daemon_name }}"
+    group: "{{ aivi_daemon_name }}"
+    mode: u=rwX,g=rX,o=rX
+
+- name: Create aivi var directory
+  file:
+    path: "{{ aivi_var_dir }}"
+    state: directory
+    owner: "{{ aivi_daemon_name }}"
+    group: "{{ aivi_storage_group_name }}"
+    mode: u=rwX,g=rwX,o=rX
+    recurse: true
+
+- name: Create buffer directory for results before nifi upload
+  file:
+    path: "{{ aivi_buffer_dir }}"
+    state: directory
+    owner: "{{ aivi_daemon_name }}"
+    group: "{{ aivi_storage_group_name }}"
+    mode: u=rwX,g=rwX,o=rX
+    recurse: true
+
+- name: Create archive directory for results after nifi upload
+  file:
+    path: "{{ aivi_archive_dir }}"
+    state: directory
+    owner: "{{ aivi_daemon_name }}"
+    group: "{{ aivi_storage_group_name }}"
+    mode: u=rwX,g=rwX,o=rX
+    recurse: true
+
+- name: Create path for the startup file for aivi application at session login
+  file:
+    path: /home/{{ aivi_user_name }}/.config/autostart/
+    state: directory
+    owner: "{{ aivi_user_name }}"
+    group: "{{ aivi_user_name }}"
+
+- name: Create aivi Desktop directory
+  file:
+    path: /home/{{ aivi_user_name }}/Desktop
+    state: directory
+    owner: "{{ aivi_user_name }}"
+    group: "{{ aivi_user_name }}"

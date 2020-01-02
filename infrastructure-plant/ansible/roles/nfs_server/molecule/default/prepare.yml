@@ -1,0 +1,6 @@
+---
+- name: Setuping the edge-stations
+  hosts: edge_stations
+  become: true
+  roles:
+    - role: init_system

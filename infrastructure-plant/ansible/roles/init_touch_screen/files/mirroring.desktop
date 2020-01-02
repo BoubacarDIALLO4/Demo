@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Exec=gnome-terminal -e "/usr/bin/python /opt/aivi/bin/mirroring_script.py"
+Hidden=false
+NoDisplay=false
+Name[en_US]=mirroring
+Name=mirroring
+Comment[en_US]=Configure screen's mirroring on startup
+Comment=Configure screen's mirroring on startup

@@ -1,0 +1,9 @@
+---
+aivi_user_name: "aivi"
+aivi_daemon_name: "aivid"
+aivi_storage_group_name: "aivi_storage"
+app_version: "0.0.0"
+aivi_etc_dir: "/etc/aivi"
+aivi_service_etc_dir: "{{ aivi_etc_dir }}/inference"
+aivi_var_dir: "/storage/aivi/"
+aivi_model_dir: "/opt/aivi/models"

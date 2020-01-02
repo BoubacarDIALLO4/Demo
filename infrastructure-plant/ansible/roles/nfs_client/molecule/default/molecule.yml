@@ -1,0 +1,58 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+  provider:
+    name: virtualbox
+lint:
+  name: yamllint
+platforms:
+  - name: instance-edgestation
+    box: centos/7
+    memory: 1024
+    cpus: 1
+    provider_options:
+      gui: false
+    provision: true
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        ip: 192.168.10.20
+        type: static
+    groups:
+      - edge_stations
+  - name: instance-centralstation
+    box: centos/7
+    memory: 1024
+    cpus: 1
+    provider_options:
+      gui: false
+    provision: true
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        ip: 192.168.10.10
+        type: static
+    groups:
+      - central_stations
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+  log: true
+scenario:
+  name: default
+  test_sequence:
+    - lint
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - idempotence
+    - verify
+verifier:
+  name: testinfra
+  lint:
+    name: flake8

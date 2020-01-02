@@ -1,0 +1,21 @@
+{{ aivi_user_name }} ALL=NOPASSWD: /bin/systemctl start aivi.service
+{{ aivi_user_name }} ALL=NOPASSWD: /bin/systemctl stop aivi.service
+{{ aivi_user_name }} ALL=NOPASSWD: /bin/systemctl restart aivi.service
+
+{{ aivi_user_name }} ALL=NOPASSWD: /bin/systemctl start aivi-inference.service
+{{ aivi_user_name }} ALL=NOPASSWD: /bin/systemctl stop aivi-inference.service
+{{ aivi_user_name }} ALL=NOPASSWD: /bin/systemctl restart aivi-inference.service
+
+{{ aivi_user_name }} ALL=NOPASSWD: /bin/systemctl start aivi-desync*.service
+{{ aivi_user_name }} ALL=NOPASSWD: /bin/systemctl stop aivi-desync*.service
+{{ aivi_user_name }} ALL=NOPASSWD: /bin/systemctl restart aivi-desync*.service
+
+{{ aivi_user_name }} ALL=NOPASSWD: /bin/systemctl start basler-configurator.service
+{{ aivi_user_name }} ALL=NOPASSWD: /bin/systemctl stop basler-configurator.service
+{{ aivi_user_name }} ALL=NOPASSWD: /bin/systemctl restart basler-configurator.service
+
+{{ aivi_user_name }} ALL=NOPASSWD: /bin/systemctl start firefox.service
+{{ aivi_user_name }} ALL=NOPASSWD: /bin/systemctl stop firefox.service
+{{ aivi_user_name }} ALL=NOPASSWD: /bin/systemctl restart firefox.service
+
+{{ aivi_user_name }} ALL=NOPASSWD: /etc/opt/elo-usb/elova

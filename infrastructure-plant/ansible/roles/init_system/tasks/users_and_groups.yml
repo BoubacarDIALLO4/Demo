@@ -1,0 +1,30 @@
+---
+- name: Create group aivi_storage
+  group:
+    name: "{{ aivi_storage_group_name }}"
+    state: present
+    gid: "{{ aivi_storage_group_gid }}"
+
+- name: Create aivi user
+  user:
+    name: "{{ aivi_user_name }}"
+    state: present
+    create_home: true
+    update_password: on_create
+    password: "{{ aivi_password | password_hash('sha512') }}"
+    home: "/home/{{ aivi_user_name }}"
+
+- name: Create aivi-daemon user
+  user:
+    name: "{{ aivi_daemon_name }}"
+    state: present
+    create_home: false
+    groups: "{{ aivi_storage_group_name }}"
+
+- name: Create nfs user for accessing aivi storage area
+  user:
+    name: "{{ nfs_user_name }}"
+    state: present
+    create_home: false
+    uid: "{{ nfs_user_uid }}"
+    groups: "{{ aivi_storage_group_name }}"

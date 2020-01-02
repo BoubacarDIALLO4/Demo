@@ -1,0 +1,5 @@
+---
+# defaults file for deploy_models
+aivi_model_dir: "/opt/aivi/models"
+model_src_dir: "models/"
+aivi_daemon_name: "aivid"

@@ -1,0 +1,22 @@
+---
+
+- name: Check status aivi service
+  uri:
+    url: http://localhost:5000/aivi/health
+    method: GET
+  register: health_response
+  retries: 10
+  delay: 5
+  until: health_response.status == 200
+
+- name: Check status aivi desync station service
+  uri:
+    url: http://localhost:500{{ index + 1  }}/aivi/health
+    method: GET
+  register: health_response
+  retries: 10
+  delay: 5
+  until: health_response.status == 200
+  with_sequence: "count={{ desync_stations.files | length }}"
+  loop_control:
+    index_var: index

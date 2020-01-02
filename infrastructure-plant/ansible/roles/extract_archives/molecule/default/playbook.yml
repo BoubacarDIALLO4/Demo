@@ -1,0 +1,9 @@
+---
+- name: Converge
+  hosts: edge_stations
+  vars:
+    aivi_password: "aivi"
+    pylon_archive_path: "../molecule/default/files/fake_pylon.tar.gz"
+    app_archive_name: "../molecule/default/files/fake_aivi.tar.gz"
+  roles:
+    - role: extract_archives

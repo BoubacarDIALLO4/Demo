@@ -1,0 +1,6 @@
+---
+authorized_users_usbguard:
+  - "root"
+  - "aiviadmin"
+  - "9techadmin"
+  - "localadmin"

@@ -1,0 +1,21 @@
+---
+
+- name: Backuping variables
+  set_fact:
+    backup_etc_dir: "{{ aivi_service_etc_dir }}"
+
+- name: Setting variables
+  set_fact:
+    aivi_service_etc_dir: "{{ file.path }}"
+
+- name: Push aivi desync station service unit-file
+  template:
+    src: aivi-generic.service.j2
+    dest: "/etc/systemd/system/aivi-{{ file.path | basename }}.service"
+    owner: "root"
+    group: "root"
+  notify: reload daemon
+
+- name: Restoring variables
+  set_fact:
+    aivi_service_etc_dir: "{{ backup_etc_dir }}"

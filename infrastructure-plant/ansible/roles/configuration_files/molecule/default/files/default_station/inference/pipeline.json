@@ -1,0 +1,61 @@
+{
+  "metadata": {
+    "station_info": {
+      "country": "FR",
+      "plant": "OCT",
+      "client_brand": "BMW",
+      "client_plant": "Regensburg",
+      "line_id": "UR18",
+      "row": "1",
+      "station_type": "FIN"
+    },
+    "configuration_version": "v1.1.0"
+  },
+  "nodes": [
+    {
+      "name": "meta",
+      "type": "EnrichSeatMetadata"
+    },
+    {
+      "name": "front_camera",
+      "type": "FakeCamera",
+      "position": "front",
+      "fake_camera_mode": "sequence"
+    },
+    {
+      "name": "back_camera",
+      "type": "FakeCamera",
+      "position": "back",
+      "fake_camera_mode": "sequence"
+    },
+    {
+      "name": "front_model",
+      "type": "FakeModel",
+      "camera": "front_camera",
+      "result_mode": "not_empty"
+    },
+    {
+      "name": "back_model",
+      "type": "FakeModel",
+      "camera": "back_camera",
+      "result_mode": "not_empty"
+    },
+    {
+      "name": "save_binary",
+      "type": "SaveBinary",
+      "exclude": ".*\\.raw$"
+    },
+    {
+      "name": "save_result_before_feedback",
+      "type": "SaveResult"
+    },
+    {
+      "name": "validate",
+      "type": "UserFeedback"
+    },
+    {
+      "name": "save_result_after_feedback",
+      "type": "SaveResult"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+---
+
+- name: Push start aivi desktop shortcut file
+  copy:
+    src: aivi.desktop
+    dest: "/home/aivi/Desktop/aivi.desktop"
+    owner: "{{ aivi_user_name }}"
+    group: "{{ aivi_user_name }}"
+    mode: u=rwx,g=r,o=r
+
+- name: Push stop aivi processes desktop shortcut file
+  copy:
+    src: stop-aivi.desktop
+    dest: "/home/aivi/Desktop/stop-aivi.desktop"
+    owner: "{{ aivi_user_name }}"
+    group: "{{ aivi_user_name }}"
+    mode: u=rwx,g=r,o=r
+
+- name: Push basler-configurator desktop shortcut file
+  copy:
+    src: basler-configurator.desktop
+    dest: "/home/aivi/Desktop/basler-configurator.desktop"
+    owner: "{{ aivi_user_name }}"
+    group: "{{ aivi_user_name }}"
+    mode: u=rwx,g=r,o=r
+
+- name: Push Pylon IP Configurator desktop shortcut file
+  copy:
+    src: pylon-ip-configurator.desktop
+    dest: "/home/aivi/Desktop/pylon-ip-configurator.desktop"
+    owner: "{{ aivi_user_name }}"
+    group: "{{ aivi_user_name }}"
+    mode: u=rwx,g=r,o=r
+
+- name: Push Pylon Viewer desktop shortcut file
+  copy:
+    src: pylon-viewer.desktop
+    dest: "/home/aivi/Desktop/pylon-viewer.desktop"
+    owner: "{{ aivi_user_name }}"
+    group: "{{ aivi_user_name }}"
+    mode: u=rwx,g=r,o=r
+
+- name: Push Firefox desktop shortcut file
+  copy:
+    src: firefox.desktop
+    dest: "/home/aivi/Desktop/firefox.desktop"
+    owner: "{{ aivi_user_name }}"
+    group: "{{ aivi_user_name }}"
+    mode: u=rwx,g=r,o=r
+
+- name: Push screen calibration desktop shortcut file
+  copy:
+    src: touchscreen_calibration.desktop
+    dest: "/home/aivi/Desktop/touchscreen_calibration.desktop"
+    owner: "{{ aivi_user_name }}"
+    group: "{{ aivi_user_name }}"
+    mode: u=rwx,g=r,o=r
+
+- name: Create Desktop shortcut for result images
+  file:
+    src: "{{ aivi_var_dir }}"
+    dest: /home/aivi/Desktop/results
+    state: link

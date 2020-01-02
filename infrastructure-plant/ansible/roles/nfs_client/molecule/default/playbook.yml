@@ -1,0 +1,8 @@
+---
+- name: Converge
+  hosts: central_stations
+  become: true
+  vars:
+    - stations: "[{\"ip\":\"192.168.10.20\",\"station_name\":\"edge_station\"}]"
+  roles:
+    - role: nfs_client

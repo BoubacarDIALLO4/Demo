@@ -1,0 +1,25 @@
+---
+
+- name: Copy aivi script
+  copy:
+    src: aivi.sh
+    dest: "/opt/aivi/bin/aivi.sh"
+    owner: "{{ aivi_daemon_name }}"
+    group: "{{ aivi_daemon_name }}"
+    mode: u=rwx,g=rx,o=rx
+
+- name: Copy stop processes script
+  copy:
+    src: stop.sh
+    dest: "/opt/aivi/bin/stop.sh"
+    owner: "{{ aivi_daemon_name }}"
+    group: "{{ aivi_daemon_name }}"
+    mode: u=rwx,g=rx,o=rx
+
+- name: Copy basler-configurator script
+  copy:
+    src: basler-configurator.sh
+    dest: "/opt/aivi/bin/basler-configurator.sh"
+    owner: "{{ aivi_daemon_name }}"
+    group: "{{ aivi_daemon_name }}"
+    mode: u=rwx,g=rx,o=rx

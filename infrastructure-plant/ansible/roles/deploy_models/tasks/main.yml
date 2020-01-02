@@ -1,0 +1,18 @@
+---
+# tasks file for deploy_models
+
+- name: Create model directory
+  file:
+    path: "{{ aivi_model_dir }}"
+    state: directory
+    owner: "{{ aivi_daemon_name }}"
+    group: "{{ aivi_daemon_name }}"
+    mode: u=rwx,g=rX,o=rX
+
+- name: Copy models
+  copy:
+    src: "{{ model_src_dir }}"
+    dest: "{{ aivi_model_dir }}"
+    owner: "{{ aivi_daemon_name }}"
+    group: "{{ aivi_daemon_name }}"
+    mode: u=rw,g=r,o=r

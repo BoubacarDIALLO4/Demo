@@ -1,0 +1,9 @@
+---
+
+- name: Copy configuration files
+  copy:
+    src: "{{ configuration_path }}"
+    dest: "{{ aivi_etc_dir }}"
+    owner: "{{ aivi_daemon_name }}"
+    group: "{{ aivi_daemon_name }}"
+    mode: "0644"

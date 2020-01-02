@@ -1,0 +1,43 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  name: yamllint
+platforms:
+  - name: instance
+    image: edgestation-aivi:latest
+    env:
+      http_proxy: "${http_proxy}"
+      https_proxy: "${https_proxy}"
+      no_proxy: "${no_proxy}"
+    registry:
+      url: acrprodaivi001.azurecr.io
+      credentials:
+        username: $LOGIN_NAME
+        password: $PASSWORD
+    privileged: true
+    command: /usr/sbin/init
+    groups:
+      - edge_stations
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+  log: true
+scenario:
+  name: default
+  test_sequence:
+    - lint
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - idempotence
+    - verify
+verifier:
+  name: testinfra
+  lint:
+    name: flake8

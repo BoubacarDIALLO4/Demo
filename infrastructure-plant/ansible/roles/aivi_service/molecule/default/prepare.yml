@@ -1,0 +1,10 @@
+---
+- name: Setuping the edge-stations
+  hosts: edge_stations
+  vars:
+    app_version: "{{ lookup('env','APP_VERSION') }}"
+    configuration_path: "../molecule/default/files/default_station/"
+  roles:
+    - role: init_system
+    - role: configuration_files
+    - role: extract_archives

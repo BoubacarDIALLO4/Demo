@@ -1,0 +1,11 @@
+[Unit]
+Description=firefox
+After=network.target
+
+[Service]
+User={{ aivi_user_name }}
+Environment=DISPLAY=:0
+ExecStart=/bin/firefox  http://localhost:5000
+
+[Install]
+WantedBy=multi-user.target

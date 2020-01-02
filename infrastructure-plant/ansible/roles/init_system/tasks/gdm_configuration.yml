@@ -1,0 +1,11 @@
+---
+
+- name: Ensures /etc/gdm dir exists
+  file:
+    path: "/etc/gdm"
+    state: directory
+
+- name: Change Gnome Display Manager configuration file
+  template:
+    src: custom.conf.j2
+    dest: "/etc/gdm/custom.conf"

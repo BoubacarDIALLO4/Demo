@@ -1,0 +1,9 @@
+---
+
+- name: Converge
+  hosts: edge_stations
+  become: true
+  vars:
+    central_pc_ip: "192.168.10.10"
+  roles:
+    - role: nfs_server

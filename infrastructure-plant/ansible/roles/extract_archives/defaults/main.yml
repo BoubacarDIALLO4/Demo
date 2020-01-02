@@ -1,0 +1,6 @@
+---
+aivi_user_name: "aivi"
+aivi_daemon_name: "aivid"
+app_version: "0.0.0"
+app_archive_name: "app-{{ app_version }}.tar.gz"
+pylon_archive_path: "pylonSDK-5.0.12.11829-x86_64.tar.gz"

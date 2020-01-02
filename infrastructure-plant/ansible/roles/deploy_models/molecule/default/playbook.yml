@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    - model_src_dir: "../molecule/default/files/"
+  roles:
+    - role: deploy_models

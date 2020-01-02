@@ -1,0 +1,35 @@
+# testing
+/coverage
+.coverage
+.mypy_cache/
+.pytest_cache/
+htmlcov/
+.elapse_time_makefile
+makefile_test_result.txt
+
+# Python
+*.pyc
+__pycache__/
+
+# Build and distribution
+tmp/
+dist/
+deb_dist/
+build/
+*.egg-info/
+.eggs/
+
+# misc
+.idea/
+.babelpid
+.DS_Store
+
+# Vault content
+.vault_*
+
+# Vault id
+*.retry
+
+# artefact
+aivi-*.tar.gz
+app-*.tar.gz

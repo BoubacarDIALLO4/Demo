@@ -1,0 +1,16 @@
+---
+- name: Copy mirroring script
+  copy:
+    src: mirroring_script.py
+    dest: /opt/aivi/bin
+    mode: "0755"
+
+- name: Launch mirroring configuration command
+  command: /usr/bin/python /opt/aivi/bin/mirroring_script.py
+
+- name: Copy mirroring startup file
+  copy:
+    src: mirroring.desktop
+    dest: /home/{{ aivi_user_name }}/.config/autostart/mirroring.desktop
+    owner: "{{ aivi_user_name }}"
+    group: "{{ aivi_user_name }}"

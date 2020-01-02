@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    configuration_path: "../molecule/default/files/default_station/"
+  roles:
+    - role: configuration_files

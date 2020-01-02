@@ -1,0 +1,5 @@
+---
+
+- name: reboot station
+  reboot:
+  when: task_that_needs_reboot.changed

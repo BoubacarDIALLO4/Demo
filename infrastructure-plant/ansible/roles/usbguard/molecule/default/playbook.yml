@@ -1,0 +1,7 @@
+---
+
+- name: Converge
+  hosts: edge_stations
+  become: true
+  roles:
+    - role: usbguard

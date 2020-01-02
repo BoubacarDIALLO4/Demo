@@ -1,0 +1,6 @@
+---
+- name: Restart usbguard
+  become: true
+  service:
+    name: usbguard
+    state: restarted

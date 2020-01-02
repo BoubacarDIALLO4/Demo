@@ -1,0 +1,8 @@
+---
+aivi_user_name: "aivi"
+aivi_daemon_name: "aivid"
+aivi_storage_group_name: "aivi_storage"
+aivi_version: "0.0.0"
+aivi_etc_dir: "/etc/aivi"
+aivi_var_dir: "/storage/aivi"
+configuration_path: "{{ plant_name }}/{{ instance_name }}/"

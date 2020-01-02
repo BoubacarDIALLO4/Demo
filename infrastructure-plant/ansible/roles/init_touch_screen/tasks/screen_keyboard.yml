@@ -1,0 +1,5 @@
+---
+- name: Copy keyboard activation profile file
+  copy:
+    src: screen_keyboard.sh
+    dest: /etc/profile.d/screen_keyboard.sh

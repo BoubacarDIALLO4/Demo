@@ -1,0 +1,21 @@
+---
+
+- name: Set locale language
+  import_tasks: locale_language.yml
+  tags: locale-language
+
+- name: Create users and groups
+  import_tasks: users_and_groups.yml
+  tags: users
+
+- name: Allow aivi to run specific commands as sudo
+  import_tasks: sudoers.yml
+  tags: sudo
+
+- name: Setup auto-login for aivi user
+  import_tasks: gdm_configuration.yml
+  tags: login
+
+- name: Create necessary folders to run aivi app
+  import_tasks: files_tree.yml
+  tags: files-tree

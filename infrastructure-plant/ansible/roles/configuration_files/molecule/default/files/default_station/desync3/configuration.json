@@ -1,0 +1,11 @@
+{
+  "port": 5003,
+  "display_button": true,
+  "display_feedback": false,
+  "display_result": true,
+  "display_boxes": true,
+  "display_boxes_red": true,
+  "display_boxes_yellow": true,
+  "opcua_server_url": "opc.tcp://fake.ip",
+  "opcua_tag_id": "0:FAKE,2:OPCUA,2:TAG,2:PATH,2:LIST"
+}

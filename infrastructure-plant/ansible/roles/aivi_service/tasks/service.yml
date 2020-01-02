@@ -1,0 +1,45 @@
+---
+
+- name: Push aivi service unit-file
+  copy:
+    src: aivi.service
+    dest: "/etc/systemd/system/aivi.service"
+    owner: "root"
+    group: "root"
+  notify: reload daemon
+
+- name: Push aivi-inference service unit-file
+  template:
+    src: aivi-generic.service.j2
+    dest: "/etc/systemd/system/aivi-inference.service"
+    owner: "root"
+    group: "root"
+  notify: reload daemon
+
+- name: Push basler-configurator service unit-file
+  template:
+    src: basler-configurator.service.j2
+    dest: "/etc/systemd/system/basler-configurator.service"
+    owner: "root"
+    group: "root"
+  notify: reload daemon
+
+- name: Push firefox service unit-file
+  template:
+    src: firefox.service.j2
+    dest: "/etc/systemd/system/firefox.service"
+    owner: "root"
+    group: "root"
+  notify: reload daemon
+
+- meta: flush_handlers
+
+- name: Stop AIVI related services
+  command: bash /opt/aivi/bin/stop.sh
+  changed_when: false
+
+- name: Enable service aivi-inference
+  service:
+    name: aivi-inference
+    enabled: true
+  changed_when: false

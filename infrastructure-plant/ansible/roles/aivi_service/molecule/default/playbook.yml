@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    configuration_path: "../molecule/files/default_station/"
+  roles:
+    - role: aivi_service

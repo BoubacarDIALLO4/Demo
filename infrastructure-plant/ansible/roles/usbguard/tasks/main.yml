@@ -1,0 +1,39 @@
+---
+- name: Copy usbguard files
+  copy:
+    src: '{{ item }}'
+    dest: '/tmp'
+  with_items:
+    - "usbguard-0.7.4-2.el7.x86_64.rpm"
+    - "protobuf-2.5.0-8.el7.x86_64.rpm"
+    - "libqb-1.0.1-7.el7.x86_64.rpm"
+
+- name: Install usbguard dependencies
+  yum:
+    name: ["/tmp/protobuf-2.5.0-8.el7.x86_64.rpm",
+           "/tmp/libqb-1.0.1-7.el7.x86_64.rpm"]
+    state: present
+
+- name: Install usbguard
+  yum:
+    name: "/tmp/usbguard-0.7.4-2.el7.x86_64.rpm"
+    state: present
+
+- name: Enable service usbguard, and not touch the state
+  service:
+    name: usbguard
+    enabled: true
+  register: command_enable_result
+
+- name: Copy rules file
+  copy:
+    src: "aivi-rules.conf"
+    dest: '/etc/usbguard/aivi-rules.conf'
+    mode: u=rw,g-rwx,o-rwx
+
+- name: Template and copy configuration file
+  template:
+    src: "usbguard-daemon.conf.j2"
+    dest: '/etc/usbguard/usbguard-daemon.conf'
+    mode: u=rw,g-rwx,o-rwx
+  notify: Restart usbguard

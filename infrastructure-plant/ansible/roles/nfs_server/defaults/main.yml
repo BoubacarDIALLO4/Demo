@@ -1,0 +1,9 @@
+---
+aivi_storage_group_gid: 1100
+nfs_user_uid: 1010
+ip_address: "{{ central_pc_ip }}"
+options: "(rw,sync,insecure,all_squash,anonuid={{ nfs_user_uid }},anongid={{ aivi_storage_group_gid }})"
+separator: "\t"
+aivi_var_dir: "/storage/aivi"
+aivi_buffer_dir: "{{ aivi_var_dir }}/buffer"
+aivi_archive_dir: "{{ aivi_var_dir }}/archive"

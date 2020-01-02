@@ -1,0 +1,44 @@
+---
+s0.infra ansible_user=root
+s1.infra ansible_user=root
+s2.infra ansible_user=root
+s3.infra ansible_user=root
+s4.infra ansible_user=root
+
+
+[all]
+s0.infra
+s1.infra
+s2.infra
+s3.infra
+s4.infra
+
+# Installer DNSmasq
+[Central]
+s0.infra
+
+
+[Haproxy]
+s0.infra
+
+# Installer Apache + PHP 7
+[sites]
+s1.infra
+s2.infra
+
+[wordpress]
+s1.infra
+s2.infra
+
+[apachephp]
+s1.infra
+s2.infra
+
+# Installer MariaDB
+[mariadb]
+s3.infra
+
+
+# Installer NFS server
+[NFSserver]
+s4.infra
